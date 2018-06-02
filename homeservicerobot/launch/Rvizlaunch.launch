@@ -1,0 +1,3 @@
+<launch>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d /home/nvidia/catkin_ws/src/HomeServiceRobot/RvizConfig/homeservicerobot.rviz"/>
+</launch>
