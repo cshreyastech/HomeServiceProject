@@ -3,7 +3,13 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /Local_Cost-Map1
+        - /PoseArray1
+        - /local-Path1
+        - /Marker1
+        - /Marker1/Status1
+        - /Marker1/Namespaces1
       Splitter Ratio: 0.5
     Tree Height: 369
   - Class: rviz/Selection
@@ -235,14 +241,17 @@ Visualization Manager:
       Value: true
       Visibility:
         Global-Cost-Map: true
+        Global-Path: true
         Grid: true
         LaserScan: true
         Local_Cost-Map: true
         Map: true
+        Marker: true
         PointCloud2: true
         PoseArray: true
         RobotModel: true
         Value: true
+        local-Path: true
       Zoom Factor: 1
     - Alpha: 0.699999988
       Class: rviz/Map
@@ -339,7 +348,7 @@ Visualization Manager:
       Axes Length: 0.300000012
       Axes Radius: 0.00999999978
       Class: rviz/PoseArray
-      Color: 255; 25; 0
+      Color: 0; 255; 0
       Enabled: true
       Head Length: 0.0700000003
       Head Radius: 0.0299999993
@@ -349,6 +358,60 @@ Visualization Manager:
       Shape: Arrow (Flat)
       Topic: /particlecloud
       Unreliable: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 0; 255; 0
+      Enabled: true
+      Head Diameter: 0.300000012
+      Head Length: 0.200000003
+      Length: 0.300000012
+      Line Style: Lines
+      Line Width: 0.0299999993
+      Name: Global-Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.0299999993
+      Shaft Diameter: 0.100000001
+      Shaft Length: 0.100000001
+      Topic: /move_base/DWAPlannerROS/global_plan
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 0; 0; 255
+      Enabled: true
+      Head Diameter: 0.300000012
+      Head Length: 0.200000003
+      Length: 0.300000012
+      Line Style: Lines
+      Line Width: 0.0299999993
+      Name: local-Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.0299999993
+      Shaft Diameter: 0.100000001
+      Shaft Length: 0.100000001
+      Topic: /move_base/DWAPlannerROS/local_plan
+      Unreliable: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /visualization_marker
+      Name: Marker
+      Namespaces:
+        basic_shapes: true
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
