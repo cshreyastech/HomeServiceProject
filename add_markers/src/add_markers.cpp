@@ -7,7 +7,10 @@
 
 using namespace std;
 
-visualization_msgs::Marker setMarker(string name, int id, float x, float y)
+ros::Publisher marker_pub;
+
+
+void handle_marker(string name, int id, float x, float y, bool set_status)
 {
   // Set our initial shape type to be a cube
   uint32_t shape = visualization_msgs::Marker::CUBE;
@@ -25,8 +28,11 @@ visualization_msgs::Marker setMarker(string name, int id, float x, float y)
   marker.id = id;
 
   // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
-  marker.action = visualization_msgs::Marker::ADD;
-
+  if(set_status) {
+    marker.action = visualization_msgs::Marker::ADD;
+  } else {
+    marker.action = visualization_msgs::Marker::DELETE;
+  }
 
   // Set the pose of the marker.  This is a full 6DOF pose relative to the frame/time specified in the header
   marker.pose.position.x = x;
@@ -35,23 +41,25 @@ visualization_msgs::Marker setMarker(string name, int id, float x, float y)
   marker.pose.orientation.x = 0.0;
   marker.pose.orientation.y = 0.0;
   marker.pose.orientation.z = 0.0;
-  marker.pose.orientation.w = 1.0;
+  marker.pose.orientation.w = 0.0;
 
   // Set the scale of the marker -- 1x1x1 here means 1m on a side
-  marker.scale.x = 1.0;
-  marker.scale.y = 1.0;
-  marker.scale.z = 1.0;
+  marker.scale.x = 0.5;
+  marker.scale.y = 0.5;
+  marker.scale.z = 0.5;
 
   // Set the color -- be sure to set alpha to something non-zero!
-  marker.color.r = 0.0f;
-  marker.color.g = 1.0f;
+  marker.color.r = 1.0f;
+  marker.color.g = 0.0f;
   marker.color.b = 0.0f;
   marker.color.a = 1.0;
 
   marker.lifetime = ros::Duration();
 
-  return marker;
+  marker_pub.publish(marker);
+
 }
+
 
 
 int main( int argc, char** argv )
@@ -66,7 +74,7 @@ int main( int argc, char** argv )
   ros::NodeHandle n;
 
   ros::Rate r(1);
-  ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
+  marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
 
   // Publish the marker
   while (marker_pub.getNumSubscribers() < 1)
@@ -81,37 +89,31 @@ int main( int argc, char** argv )
 
 
   ROS_INFO("Create Marker at Start Point");
-  visualization_msgs::Marker startMarker = setMarker("Marker-Start-Point", 1, xStart, yStart);
-  marker_pub.publish(startMarker);
+  //handle_marker("Marker-Start-Point" , 1, xStart, yStart, true);
+  handle_marker("Marker-Start-Point" , 1, xStart, yStart, true);
 
   // Wait 5 sec
   ROS_INFO("Waiting for 5 seconds to delete marker");
   sleep(5.0);
 
-  ROS_INFO("Delete Marker from Start Point");
-  // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
-  startMarker.action = visualization_msgs::Marker::DELETE;
-  marker_pub.publish(startMarker);
 
+  handle_marker("Marker-Start-Point" , 1, xStart, yStart, false);
 
   ROS_INFO("Waiting for 5 seconds");
   sleep(5.0);
 
 
+
   ROS_INFO("Create Marker at Goal Point");
-  visualization_msgs::Marker goalMarker = setMarker("Marker-Goal-Point", 2, xGoal, yGoal);
-  marker_pub.publish(goalMarker);
+  //handle_marker("Marker-Start-Point" , 1, xStart, yStart, true);
+  handle_marker("Marker-Start-location" , 2, xGoal, yGoal, true);
 
   // Wait 5 sec
   ROS_INFO("Waiting for 5 seconds to delete marker");
   sleep(5.0);
 
-  ROS_INFO("Delete Marker from Goal Point");
-  // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
-  goalMarker.action = visualization_msgs::Marker::DELETE;
-  marker_pub.publish(goalMarker);
-
-
+  handle_marker("Marker-Goal-location" , 2, xGoal, yGoal, false);
+  sleep(5.0);
 
   r.sleep();
 }
